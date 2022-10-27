@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 fig = plt.figure(figsize=(11, 9))
 ax = fig.add_subplot(1, 1, 1)
 
-inFile = ROOT.TFile.Open("MCP_mirror_mc.root","READ")
+inFile = ROOT.TFile.Open("MCP_fix_final.root","READ")
 h = inFile.Get("CEDARMC/Photonhits0")
 
 x = np.linspace(h.GetXaxis().GetXmin(), h.GetXaxis().GetXmax()-h.GetXaxis().GetBinWidth(1), num=h.GetNbinsX())
