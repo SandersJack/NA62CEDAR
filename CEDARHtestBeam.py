@@ -1,7 +1,11 @@
+from tokenize import Double
 import pandas as pd
 import csv
 from datetime import datetime
 import matplotlib.pyplot as plt
+import math 
+import mplhep as hep
+plt.style.use(hep.style.ROOT)
 
 ################################################
 # Formating the csv File for use in data-frame #
@@ -15,7 +19,7 @@ with open('timbers/TIMBER_data.csv', 'r') as inp, open(filename, 'w') as out:
     writer = csv.writer(out)
     r = 0
     PMTRows = []
-    pRows = []
+    pRows = [0]
     miss = 0
     pressure = False 
    
@@ -26,11 +30,16 @@ with open('timbers/TIMBER_data.csv', 'r') as inp, open(filename, 'w') as out:
                 PMTRows.append(head)  
             elif row == ['VARIABLE: XBH6.XCED.041.440:PRESSURE']:
                 
-                miss = 2
+                miss = 3
                 pressure = True
             elif miss == 0:
                 if pressure:
-                    pRows.append(row)
+                    #print(row[1])
+                    try: 
+                        pres = math.floor(float(row[1])*1000)/1000
+                        pRows.append([row[0],pres])
+                    except ValueError:
+                        print("on line", row)
                 else:
                     #print(row)
                     totalHits = 0
@@ -51,11 +60,38 @@ with open('timbers/TIMBER_data.csv', 'r') as inp, open(filename, 'w') as out:
 
 
 df = pd.read_csv(filename)
-#df['Timestamp (UTC_TIME)'] = pd.to_datetime(df['Timestamp (UTC_TIME)']))
+df['Timestamp (UTC_TIME)'] = pd.to_datetime(df['Timestamp (UTC_TIME)'])
 
-print(df.head(10))
-print(df['Timestamp (UTC_TIME)'])
+
+data_mean = df.groupby('Pressure', as_index=False)['6Fold'].mean()
+data_error = df.groupby('Pressure', as_index=False)['6Fold'].sem()
+data_mean['6Fold_Error'] = data_error['6Fold'].fillna(0)
+
+data_mean['7Fold'] = df.groupby('Pressure', as_index=False)['7Fold'].mean()['7Fold']
+data_error = df.groupby('Pressure', as_index=False)['7Fold'].sem()
+data_mean['7Fold_Error'] = data_error['7Fold'].fillna(0)
+
+data_mean['8Fold'] = df.groupby('Pressure', as_index=False)['8Fold'].mean()['8Fold']
+data_error = df.groupby('Pressure', as_index=False)['8Fold'].sem()
+data_mean['8Fold_Error'] = data_error['8Fold'].fillna(0)
+
+#print(data_mean)
+
 
 ax1 = df.plot.scatter(x='Timestamp (UTC_TIME)',y='Pressure', c='DarkBlue')
+
+ax2 = df.plot.scatter(x='Pressure',y='6Fold', c='DarkBlue',label="6Fold")
+ax2_1 = df.plot.scatter(x='Pressure',y='7Fold', c='red' , label="7Fold", ax=ax2)
+ax2_2 = df.plot.scatter(x='Pressure',y='8Fold', c='green', label="8Fold", ax=ax2)
+ax2.set_ylabel("Counts")
+ax2.legend()
+ax2.set_title("All pressure points")
+
+ax3 = data_mean.plot.scatter(x='Pressure',y='6Fold', yerr = '6Fold_Error', c='DarkBlue',label="6Fold")
+ax3_1 = data_mean.plot.scatter(x='Pressure',y='7Fold', yerr = '7Fold_Error',c='red' , label="7Fold", ax=ax3)
+ax3_2 = data_mean.plot.scatter(x='Pressure',y='8Fold', yerr = '8Fold_Error', c='green', label="8Fold", ax=ax3)
+ax3.set_ylabel("Counts")
+ax3.legend()
+ax3.set_title("Average pressure points")
 
 plt.show()
