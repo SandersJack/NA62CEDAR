@@ -3,9 +3,32 @@ import pandas as pd
 import csv
 from datetime import datetime
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 import math 
 import mplhep as hep
 plt.style.use(hep.style.ROOT)
+from os import listdir
+from os.path import isfile, join
+
+# List all files in directory timbers
+mypath = 'timbers/'
+files = []
+print('Choose which Timber Files to use')
+p = 0
+for f in listdir(mypath):
+    print('{} {}'.format(p,f))
+    files.append(join(mypath, f))
+    p += 1
+
+try:
+    chosenIndex = int(input())
+    if chosenIndex < len(files):
+        chosenFile = files[chosenIndex]
+    else:
+        raise ValueError
+except ValueError:
+    print("Invalid Entry, Has to be an integer and a valid index")
+    exit(0)
 
 ################################################
 # Formating the csv File for use in data-frame #
@@ -15,7 +38,7 @@ date_time = now.strftime("%m-%d_%H-%M-%S")
 
 filename = 'formated_data/TIMBER_data.{}.csv'.format(date_time)
 
-with open('timbers/TIMBER_data.csv', 'r') as inp, open(filename, 'w') as out:
+with open(chosenFile, 'r') as inp, open(filename, 'w') as out:
     writer = csv.writer(out)
     r = 0
     PMTRows = []
@@ -56,8 +79,6 @@ with open('timbers/TIMBER_data.csv', 'r') as inp, open(filename, 'w') as out:
         if t > 0: 
             PMTRows[t].append(pRows[t][1])
     writer.writerows(PMTRows)
-        
-
 
 df = pd.read_csv(filename)
 df['Timestamp (UTC_TIME)'] = pd.to_datetime(df['Timestamp (UTC_TIME)'])
@@ -75,8 +96,6 @@ data_mean['8Fold'] = df.groupby('Pressure', as_index=False)['8Fold'].mean()['8Fo
 data_error = df.groupby('Pressure', as_index=False)['8Fold'].sem()
 data_mean['8Fold_Error'] = data_error['8Fold'].fillna(0)
 
-#print(data_mean)
-
 
 ax1 = df.plot.scatter(x='Timestamp (UTC_TIME)',y='Pressure', c='DarkBlue')
 
@@ -93,5 +112,6 @@ ax3_2 = data_mean.plot.scatter(x='Pressure',y='8Fold', yerr = '8Fold_Error', c='
 ax3.set_ylabel("Counts")
 ax3.legend()
 ax3.set_title("Average pressure points")
+
 
 plt.show()
