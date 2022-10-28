@@ -7,7 +7,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 import math 
 import mplhep as hep
 plt.style.use(hep.style.ROOT)
-from os import listdir
+from os import listdir , makedirs
 from os.path import isfile, join
 
 # List all files in directory timbers
@@ -96,8 +96,16 @@ data_mean['8Fold'] = df.groupby('Pressure', as_index=False)['8Fold'].mean()['8Fo
 data_error = df.groupby('Pressure', as_index=False)['8Fold'].sem()
 data_mean['8Fold_Error'] = data_error['8Fold'].fillna(0)
 
+pdfname = str(df['Timestamp (UTC_TIME)'].iloc[0].strftime('%m-%d_%I-%M')) + "--" + str(df['Timestamp (UTC_TIME)'].iloc[-1].strftime('%m-%d_%I-%M'))
+try:
+    makedirs('pdf/{}'.format(pdfname))
+except FileExistsError:
+    pass
+    
+print(pdfname)
 
 ax1 = df.plot.scatter(x='Timestamp (UTC_TIME)',y='Pressure', c='DarkBlue')
+plt.savefig("pdf/{}/Pressure.pdf".format(pdfname), format="pdf", bbox_inches="tight")
 
 ax2 = df.plot.scatter(x='Pressure',y='6Fold', c='DarkBlue',label="6Fold")
 ax2_1 = df.plot.scatter(x='Pressure',y='7Fold', c='red' , label="7Fold", ax=ax2)
@@ -105,6 +113,7 @@ ax2_2 = df.plot.scatter(x='Pressure',y='8Fold', c='green', label="8Fold", ax=ax2
 ax2.set_ylabel("Counts")
 ax2.legend()
 ax2.set_title("All pressure points")
+plt.savefig("pdf/{}/CoincidencesAllPoints.pdf".format(pdfname), format="pdf", bbox_inches="tight")
 
 ax3 = data_mean.plot.scatter(x='Pressure',y='6Fold', yerr = '6Fold_Error', c='DarkBlue',label="6Fold")
 ax3_1 = data_mean.plot.scatter(x='Pressure',y='7Fold', yerr = '7Fold_Error',c='red' , label="7Fold", ax=ax3)
@@ -112,6 +121,7 @@ ax3_2 = data_mean.plot.scatter(x='Pressure',y='8Fold', yerr = '8Fold_Error', c='
 ax3.set_ylabel("Counts")
 ax3.legend()
 ax3.set_title("Average pressure points")
+plt.savefig("pdf/{}/CoincidencesAvgPoints.pdf".format(pdfname), format="pdf", bbox_inches="tight")
 
 
-plt.show()
+#plt.show()
