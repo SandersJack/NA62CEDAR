@@ -7,7 +7,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 import math 
 import mplhep as hep
 plt.style.use(hep.style.ROOT)
-from os import listdir , makedirs
+from os import listdir , makedirs, path
 from os.path import isfile, join
 
 # List all files in directory timbers
@@ -36,10 +36,8 @@ except ValueError:
 now = datetime.now() # current date and time
 date_time = now.strftime("%m-%d_%H-%M-%S")
 
-filename = 'formated_data/TIMBER_data.{}.csv'.format(date_time)
 
-with open(chosenFile, 'r') as inp, open(filename, 'w') as out:
-    writer = csv.writer(out)
+with open(chosenFile, 'r') as inp:
     r = 0
     PMTRows = []
     pRows = [0]
@@ -57,14 +55,12 @@ with open(chosenFile, 'r') as inp, open(filename, 'w') as out:
                 pressure = True
             elif miss == 0:
                 if pressure:
-                    #print(row[1])
                     try: 
                         pres = math.floor(float(row[1])*1000)/1000
                         pRows.append([row[0],pres])
                     except ValueError:
                         print("on line", row)
                 else:
-                    #print(row)
                     totalHits = 0
                     for i in range(1,9):
                         totalHits += int(row[i])
@@ -78,9 +74,14 @@ with open(chosenFile, 'r') as inp, open(filename, 'w') as out:
     for t in range(len(PMTRows)):
         if t > 0: 
             PMTRows[t].append(pRows[t][1])
-    writer.writerows(PMTRows)
+    
+    outfile = str("formated_data/Timber_data."+PMTRows[1][0].replace(" ", ".").replace(":", "-").replace(".", "-")+"_"+PMTRows[-1][0].replace(" ", ".").replace(":", "-").replace(".", "-"))
+    if path.exists(outfile) == False:
+        with open(outfile, 'w') as out:
+            writer = csv.writer(out)
+            writer.writerows(PMTRows)
 
-df = pd.read_csv(filename)
+df = pd.read_csv(outfile)
 df['Timestamp (UTC_TIME)'] = pd.to_datetime(df['Timestamp (UTC_TIME)'])
 
 
@@ -102,7 +103,6 @@ try:
 except FileExistsError:
     pass
     
-print(pdfname)
 
 ax1 = df.plot.scatter(x='Timestamp (UTC_TIME)',y='Pressure', c='DarkBlue')
 plt.savefig("pdf/{}/Pressure.pdf".format(pdfname), format="pdf", bbox_inches="tight")
