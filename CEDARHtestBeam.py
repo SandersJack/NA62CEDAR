@@ -124,4 +124,4 @@ ax3.set_title("Average pressure points")
 plt.savefig("pdf/{}/CoincidencesAvgPoints.pdf".format(pdfname), format="pdf", bbox_inches="tight")
 
 
-#plt.show()
+plt.show()
