@@ -75,7 +75,7 @@ with open(chosenFile, 'r') as inp:
         if t > 0: 
             PMTRows[t].append(pRows[t][1])
     
-    outfile = str("formated_data/Timber_data."+PMTRows[1][0].replace(" ", ".").replace(":", "-").replace(".", "-")+"_"+PMTRows[-1][0].replace(" ", ".").replace(":", "-").replace(".", "-"))
+    outfile = str("formated_data/Timber_data."+PMTRows[1][0].replace(" ", ".").replace(":", "-").replace(".", "-")+"_"+PMTRows[-1][0].replace(" ", ".").replace(":", "-").replace(".", "-")+".csv")
     if path.exists(outfile) == False:
         with open(outfile, 'w') as out:
             writer = csv.writer(out)
