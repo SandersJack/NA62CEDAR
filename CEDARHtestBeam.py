@@ -110,7 +110,7 @@ plt.savefig("pdf/{}/Pressure.pdf".format(pdfname), format="pdf", bbox_inches="ti
 ax2 = df.plot.scatter(x='Pressure',y='6Fold', c='DarkBlue',label="6Fold")
 ax2_1 = df.plot.scatter(x='Pressure',y='7Fold', c='red' , label="7Fold", ax=ax2)
 ax2_2 = df.plot.scatter(x='Pressure',y='8Fold', c='green', label="8Fold", ax=ax2)
-ax2.set_ylabel("Counts")
+ax2.set_ylabel("Coincidences")
 ax2.legend()
 ax2.set_title("All pressure points")
 plt.savefig("pdf/{}/CoincidencesAllPoints.pdf".format(pdfname), format="pdf", bbox_inches="tight")
@@ -118,10 +118,35 @@ plt.savefig("pdf/{}/CoincidencesAllPoints.pdf".format(pdfname), format="pdf", bb
 ax3 = data_mean.plot.scatter(x='Pressure',y='6Fold', yerr = '6Fold_Error', c='DarkBlue',label="6Fold")
 ax3_1 = data_mean.plot.scatter(x='Pressure',y='7Fold', yerr = '7Fold_Error',c='red' , label="7Fold", ax=ax3)
 ax3_2 = data_mean.plot.scatter(x='Pressure',y='8Fold', yerr = '8Fold_Error', c='green', label="8Fold", ax=ax3)
-ax3.set_ylabel("Counts")
+ax3.set_ylabel("Coincidences")
 ax3.legend()
 ax3.set_title("Average pressure points")
 plt.savefig("pdf/{}/CoincidencesAvgPoints.pdf".format(pdfname), format="pdf", bbox_inches="tight")
 
+
+
+df['6FoldpTrigger'] = df['6Fold']/df['Trigger']
+df['7FoldpTrigger'] = df['7Fold']/df['Trigger']
+df['8FoldpTrigger'] = df['8Fold']/df['Trigger']
+
+dfpTrigger_mean = df.groupby('Pressure', as_index=False)['6FoldpTrigger'].mean()
+dfpTrigger_error = df.groupby('Pressure', as_index=False)['6FoldpTrigger'].sem()
+dfpTrigger_mean['6FoldpTrigger_Error'] = dfpTrigger_error['6FoldpTrigger'].fillna(0)
+
+dfpTrigger_mean['7FoldpTrigger'] = df.groupby('Pressure', as_index=False)['7FoldpTrigger'].mean()['7FoldpTrigger']
+dfpTrigger_error = df.groupby('Pressure', as_index=False)['7FoldpTrigger'].sem()
+dfpTrigger_mean['7FoldpTrigger_Error'] = dfpTrigger_error['7FoldpTrigger'].fillna(0)
+
+dfpTrigger_mean['8FoldpTrigger'] = df.groupby('Pressure', as_index=False)['8FoldpTrigger'].mean()['8FoldpTrigger']
+dfpTrigger_error = df.groupby('Pressure', as_index=False)['8FoldpTrigger'].sem()
+dfpTrigger_mean['8FoldpTrigger_Error'] = dfpTrigger_error['8FoldpTrigger'].fillna(0)
+
+ax4 = dfpTrigger_mean.plot.scatter(x='Pressure',y='6FoldpTrigger', yerr = '6FoldpTrigger_Error', c='DarkBlue',label="6Fold")
+ax4_1 = dfpTrigger_mean.plot.scatter(x='Pressure',y='7FoldpTrigger', yerr = '7FoldpTrigger_Error',c='red' , label="7Fold", ax=ax4)
+ax4_2 = dfpTrigger_mean.plot.scatter(x='Pressure',y='8FoldpTrigger', yerr = '8FoldpTrigger_Error', c='green', label="8Fold", ax=ax4)
+ax4.set_ylabel("Coincidences per trigger")
+ax4.legend()
+ax4.set_title("Cumulative Coincidences per Trigger vs Pressure")
+plt.savefig("pdf/{}/CoincidencesAvgPointspTrigger.pdf".format(pdfname), format="pdf", bbox_inches="tight")
 
 plt.show()
