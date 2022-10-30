@@ -97,7 +97,7 @@ with open(chosenFile, 'r') as inp:
             logtext += com
 
             file_object = open('pdf/logbook.txt', 'a')
-            file_object.write(logtext)
+            file_object.write(logtext + "\n")
             file_object.close()
 
 
