@@ -117,7 +117,7 @@ data_mean['8Fold'] = df.groupby('Pressure', as_index=False)['8Fold'].mean()['8Fo
 data_error = df.groupby('Pressure', as_index=False)['8Fold'].sem()
 data_mean['8Fold_Error'] = data_error['8Fold'].fillna(0)
 
-pdfname = str(df['Timestamp (UTC_TIME)'].iloc[0].strftime('%m-%d_%I-%M')) + "--" + str(df['Timestamp (UTC_TIME)'].iloc[-1].strftime('%m-%d_%I-%M'))
+pdfname = str(df['Timestamp (UTC_TIME)'].iloc[0].strftime('%m-%d_%H-%M')) + "--" + str(df['Timestamp (UTC_TIME)'].iloc[-1].strftime('%m-%d_%H-%M'))
 try:
     makedirs('pdf/{}'.format(pdfname))
 except FileExistsError:
