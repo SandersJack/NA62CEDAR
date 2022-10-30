@@ -75,11 +75,31 @@ with open(chosenFile, 'r') as inp:
         if t > 0: 
             PMTRows[t].append(pRows[t][1])
     
-    outfile = str("formated_data/Timber_data."+PMTRows[1][0].replace(" ", ".").replace(":", "-").replace(".", "-")+"_"+PMTRows[-1][0].replace(" ", ".").replace(":", "-").replace(".", "-")+".csv")
+    t1t2 = PMTRows[1][0].replace(" ", ".").replace(":", "-").replace(".", "-")+"_"+PMTRows[-1][0].replace(" ", ".").replace(":", "-").replace(".", "-")
+    outfile = str("formated_data/Timber_data."+t1t2+".csv")
     if path.exists(outfile) == False:
         with open(outfile, 'w') as out:
             writer = csv.writer(out)
             writer.writerows(PMTRows)
+            ### Write a log file entry ###
+            logtext = str(t1t2) 
+            print("Is this CEDAR using H or N?")
+            while True:
+                gas_type = input().capitalize()
+                if gas_type == "H" or gas_type == "N":
+                    logtext += " --- Gas Type: {} - ".format(gas_type)
+                    break
+                else:
+                    print("Please input either H or N")
+                
+            print("Add a comment below")
+            com = input()
+            logtext += com
+
+            file_object = open('pdf/logbook.txt', 'a')
+            file_object.write(logtext)
+            file_object.close()
+
 
 df = pd.read_csv(outfile)
 df['Timestamp (UTC_TIME)'] = pd.to_datetime(df['Timestamp (UTC_TIME)'])
