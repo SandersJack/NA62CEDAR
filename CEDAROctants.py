@@ -5,6 +5,7 @@ from random import randint
 from scipy.stats import poisson
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
 
 seed(987665)
 mu = [15,20,25]
@@ -49,9 +50,8 @@ for v in range((len(mu))):
 
 fig, ax = plt.subplots()
 for v in range((len(mu))):
-    sns.histplot(data=nSectors_[v],binwidth=1.01,fill=False,ax=ax,label="mu={}".format(mu[v]))
+    sns.histplot(x=nSectors_[v],discrete=True,fill=False,ax=ax,label="mu={}".format(mu[v]),weights=np.full(totalrings,1/totalrings))
 
 ax.legend()
-
-ax.set(xlabel='N Coincidences', ylabel='Coincidences',title="Exactly N Fold Coincidences")
+ax.set(xlabel='N Coincidences', ylabel='Fraction of Total Triggers',title="Exactly N Fold Coincidences")
 plt.show()
