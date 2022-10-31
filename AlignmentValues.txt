@@ -1,0 +1,2 @@
+# Values for Alignment Check: id PMT0 PMT1 PMT2 PMT3 PMT4 PMT5 PMT6 PMT7 Trigger x-Value y-Value 
+0 110 100 90 94 97 105 110 104 100 1 1
