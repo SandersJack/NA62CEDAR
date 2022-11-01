@@ -46,10 +46,10 @@ diffs.append([(avrgs[3]-avrgs[7]),-(avrgs[3]-avrgs[7])])
 fig = plt.figure()
 ax1 = fig.add_subplot(111)
 
-ax1.plot([0, 0], [0.5, -0.5],linestyle='--')
-ax1.plot([0.5, -0.5], [0, 0],linestyle='--')
-ax1.plot([0.5, -0.5], [.5, -0.5],linestyle='--')
-ax1.plot([0.5, -0.5], [-.5, 0.5],linestyle='--')
+ax1.plot([0, 0], [0.01, -0.01],linestyle='--')
+ax1.plot([0.01, -0.01], [0, 0],linestyle='--')
+ax1.plot([0.01, -0.01], [.01, -0.01],linestyle='--')
+ax1.plot([0.01, -0.01], [-.01, 0.01],linestyle='--')
 
 for t in range(len(diffs)):
     ax1.scatter(diffs[t][0],diffs[t][1])
