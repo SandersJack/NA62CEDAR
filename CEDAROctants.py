@@ -23,6 +23,9 @@ for l in range(len(mu)):
         octantbool = [0,0,0,0,0,0,0,0]
         for photon in range(nphotons):
             octant = randint(0,7)
+            cont = randint(0,10)
+            #if cont == 0 or cont == 1:
+            #    continue
             octantHits[octant] += 1
             octantbool[octant] = 1
         nSectors.append(sum(octantbool))
