@@ -97,7 +97,7 @@ with open(chosenFile, 'r') as inp:
             logtext += com
 
             file_object = open('pdf/logbook.txt', 'a')
-            file_object.write(logtext + "\n")
+            file_object.write('\n'+ logtext )
             file_object.close()
 
 
@@ -177,5 +177,22 @@ ax5.legend()
 ax5.set_title("At Least N Coincidences per Trigger vs Pressure")
 ax5.set_yscale('log')
 plt.savefig("pdf/{}/LogCoincidencesAvgPointspTrigger.pdf".format(pdfname), format="pdf", bbox_inches="tight")
+
+df['R76'] = df['7Fold']/df['6Fold']
+df['R87'] = df['8Fold']/df['7Fold']
+
+dRatio_mean = df.groupby('Pressure', as_index=False)['R76'].mean()
+dRatio_error = df.groupby('Pressure', as_index=False)['R76'].sem()
+dRatio_mean['R76_Error'] = dRatio_error['R76'].fillna(0)
+
+dRatio_mean['R87'] = df.groupby('Pressure', as_index=False)['R87'].mean()['R87']
+dRatio_error = df.groupby('Pressure', as_index=False)['R87'].sem()
+dRatio_mean['R87_Error'] = dRatio_error['R87'].fillna(0)
+
+ax6 = dRatio_mean.plot.scatter(x='Pressure',y='R76', yerr = 'R76_Error', xerr=0.001, c='DarkBlue',label="R76")
+ax6_1 = dRatio_mean.plot.scatter(x='Pressure',y='R87', yerr = 'R87_Error',xerr=0.001,c='red' , label="R87", ax=ax6)
+ax6.set_ylabel("Ratio")
+ax6.legend()
+plt.savefig("pdf/{}/RatioPlot.pdf".format(pdfname), format="pdf", bbox_inches="tight")
 
 plt.show()
