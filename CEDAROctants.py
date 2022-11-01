@@ -6,12 +6,14 @@ from scipy.stats import poisson
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+import mplhep as hep
+plt.style.use(hep.style.ROOT)
 
 seed(987665)
-mu = [15,20,25]
+mu = np.linspace(15,30,31)
 nSectors_ = []
 nHits_ = []
-totalrings = 10000
+totalrings = 100000
 for l in range(len(mu)):
     nSectors = []
     nHits = []
@@ -28,7 +30,9 @@ for l in range(len(mu)):
     nSectors_.append(nSectors)
     nHits_.append(nHits)
 
-n8Sectors_ = n7Sectors_ = n6Sectors_ = []
+n8Sectors_ = []
+n7Sectors_ = []
+n6Sectors_ = []
 for v in range((len(mu))):
     n8Sectors = n7Sectors = n6Sectors = 0
     for t in range(len(nSectors)):
@@ -47,11 +51,27 @@ for v in range((len(mu))):
     print("Number of at least 7 coincidence = {} . fraction of total rings {} ".format(n7Sectors, n7Sectors/totalrings))
     print("Number of at least 8 coincidence = {} . fraction of total rings {} ".format(n8Sectors, n8Sectors/totalrings))
 
-
-fig, ax = plt.subplots()
+fig0 = plt.figure()
+ax0 = fig0.add_subplot(111)
+r87 = []
+r76 = []
 for v in range((len(mu))):
-    sns.histplot(x=nSectors_[v],discrete=True,fill=False,ax=ax,label="mu={}".format(mu[v]),weights=np.full(totalrings,1/totalrings))
+    sns.histplot(x=nSectors_[v],discrete=True,fill=False,ax=ax0,label="mu={}".format(mu[v]),weights=np.full(totalrings,1/totalrings))
+    r87.append(float(n8Sectors_[v])/n7Sectors_[v])
+    r76.append(float(n7Sectors_[v]/n6Sectors_[v]))
+    
+ax0.set(xlabel='N Coincidences', ylabel='Fraction of Total Triggers',title="Exactly N Fold Coincidences")
+ax0.legend()
+plt.savefig("pdf/OctantSim/Coincidences.pdf", format="pdf", bbox_inches="tight")
 
-ax.legend()
-ax.set(xlabel='N Coincidences', ylabel='Fraction of Total Triggers',title="Exactly N Fold Coincidences")
+fig = plt.figure()
+ax1 = fig.add_subplot(111)
+
+ax1.plot(mu,r87, label="R87",linestyle='--', marker='o', color='r')
+ax1.plot(mu,r76, label="R76", linestyle='--', marker='o', color='b')
+
+ax1.legend()
+ax1.set_xlabel(r"Mean number of photoelectrons ($\lambda$)")
+ax1.set_title("Ratio of cumulative coincidence probabilities")
+plt.savefig("pdf/OctantSim/RatioPlot.pdf", format="pdf", bbox_inches="tight")
 plt.show()
