@@ -83,14 +83,15 @@ with open(chosenFile, 'r') as inp:
             writer.writerows(PMTRows)
             ### Write a log file entry ###
             logtext = str(t1t2) 
-            print("Is this CEDAR using H or N?")
+            print("Is this CEDAR using H, N or HN?")
             while True:
-                gas_type = input().capitalize()
-                if gas_type == "H" or gas_type == "N":
+                gas_type = input().upper()
+                print(gas_type)
+                if gas_type == "H" or gas_type == "N" or gas_type == "HN":
                     logtext += " --- Gas Type: {} - ".format(gas_type)
                     break
                 else:
-                    print("Please input either H or N")
+                    print("Please input either H, N or HN")
                 
             print("Add a comment below")
             com = input()

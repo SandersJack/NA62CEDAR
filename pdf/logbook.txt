@@ -17,3 +17,6 @@
 2022-10-31-16-00-12-135_2022-10-31-18-37-36-135 --- Gas Type: H - Contiuation of pressure scan 
 2022-10-31-16-00-12-135_2022-10-31-18-46-28-935 --- Gas Type: H - Contiuation of pressure scan 
 2022-10-31-16-00-12-135_2022-10-31-19-00-38-535 --- Gas Type: H - Contiuation of pressure scan 
+2022-11-01-12-30-44-535_2022-11-01-15-09-46-935 --- Gas Type: H - First cycle of Nitrogen Purging - No Beam
+2022-11-01-17-30-03-735_2022-11-01-19-29-46-935 --- Gas Type: HN - Nitrogen purging from 22% to 13.2% but missing beam up to around 1.7bar
+2022-11-01-19-20-10-935_2022-11-01-21-55-56-535 --- Gas Type: HN - Nitrogen purging at 13%
