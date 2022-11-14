@@ -62,6 +62,7 @@ with open(chosenFile, 'r') as inp:
                         print("on line", row)
                 else:
                     totalHits = 0
+                    #print(row)
                     for i in range(1,9):
                         totalHits += int(row[i])
                     row.append(totalHits)
