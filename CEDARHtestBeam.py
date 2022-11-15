@@ -197,4 +197,38 @@ ax6.set_ylabel("Ratio")
 ax6.legend()
 plt.savefig("pdf/{}/RatioPlot.pdf".format(pdfname), format="pdf", bbox_inches="tight")
 
+df.loc[df['Pressure'] <= 3.787 , '6Foldeff'] = (df['6Fold']/df['Trigger'])/0.71
+df.loc[df['Pressure'] > 3.787, '6Foldeff'] = (df['6Fold']/df['Trigger'])/0.036
+df.loc[df['Pressure'] > 4, '6Foldeff'] = (df['6Fold']/df['Trigger'])/0.254
+
+df.loc[df['Pressure'] <= 3.787 , '7Foldeff'] = (df['7Fold']/df['Trigger'])/0.71
+df.loc[df['Pressure'] > 3.787, '7Foldeff'] = (df['7Fold']/df['Trigger'])/0.036
+df.loc[df['Pressure'] > 4, '7Foldeff'] = (df['7Fold']/df['Trigger'])/0.254
+
+df.loc[df['Pressure'] <= 3.787 , '8Foldeff'] = (df['8Fold']/df['Trigger'])/0.71
+df.loc[df['Pressure'] > 3.787, '8Foldeff'] = (df['8Fold']/df['Trigger'])/0.036
+df.loc[df['Pressure'] > 4, '8Foldeff'] = (df['8Fold']/df['Trigger'])/0.254
+
+eff_mean = df.groupby('Pressure', as_index=False)['6Foldeff'].mean()
+eff_error = df.groupby('Pressure', as_index=False)['6Foldeff'].sem()
+eff_mean['6Foldeff_Error'] = eff_error['6Foldeff'].fillna(0)
+
+eff_mean['7Foldeff'] = df.groupby('Pressure', as_index=False)['7Foldeff'].mean()['7Foldeff']
+eff_error = df.groupby('Pressure', as_index=False)['7Foldeff'].sem()
+eff_mean['7Foldeff_Error'] = eff_error['7Foldeff'].fillna(0)
+
+eff_mean['8Foldeff'] = df.groupby('Pressure', as_index=False)['8Foldeff'].mean()['8Foldeff']
+eff_error = df.groupby('Pressure', as_index=False)['8Foldeff'].sem()
+eff_mean['8Foldeff_Error'] = eff_error['8Foldeff'].fillna(0)
+
+ax7 = eff_mean.plot.scatter(x='Pressure',y='6Foldeff', yerr = '6Foldeff_Error', xerr=0.001, c='DarkBlue',label="6Fold")
+ax7_1 = eff_mean.plot.scatter(x='Pressure',y='7Foldeff', yerr = '7Foldeff_Error',xerr=0.001,c='red' , label="7Fold", ax=ax7)
+ax7_2 = eff_mean.plot.scatter(x='Pressure',y='8Foldeff', yerr = '8Foldeff_Error', xerr=0.001,c='green', label="8Fold", ax=ax7)
+ax7.set_ylabel("Efficiency")
+ax7.legend()
+ax7.grid()
+ax7.set_title("Efficiency vs Pressure")
+plt.savefig("pdf/{}/EfficiencyvsPressure.pdf".format(pdfname), format="pdf", bbox_inches="tight")
+
+#print(df['Pressure'],df['6Foldeff'])
 plt.show()
