@@ -9,6 +9,22 @@ import mplhep as hep
 plt.style.use(hep.style.ROOT)
 from os import listdir , makedirs, path
 from os.path import isfile, join
+import numpy as np
+
+def n7n8Photons(n7,n8):
+    return np.log(1+((8)/((n7/n8)-1)))
+
+def n6n8Photons(n6,n8):
+    return np.log(1+((14)/(np.sqrt(4-7*(1-n6/n8))-2)))
+
+def Fold8eff(phi):
+    return (1-np.exp(-phi))**8
+
+def Fold7eff(phi,n8):
+    return n8 + 8*(1-np.exp(-phi))**7*np.exp(-phi)
+
+def Fold6eff(phi,n7):
+    return n7 + 28*(1-np.exp(-phi))**6*np.exp(-2*phi)
 
 # List all files in directory timbers
 mypath = 'timbers/'
@@ -229,6 +245,33 @@ ax7.legend()
 ax7.grid()
 ax7.set_title("Efficiency vs Pressure")
 plt.savefig("pdf/{}/EfficiencyvsPressure.pdf".format(pdfname), format="pdf", bbox_inches="tight")
+
+
+dfpTrigger_mean['Photons78'] = n7n8Photons(dfpTrigger_mean['7FoldpTrigger'],dfpTrigger_mean['8FoldpTrigger'])
+dfpTrigger_mean['Photons68'] = n7n8Photons(dfpTrigger_mean['6FoldpTrigger'],dfpTrigger_mean['8FoldpTrigger'])
+dfpTrigger_mean['AvgPhoton'] = (dfpTrigger_mean['Photons78'] + dfpTrigger_mean['Photons68'])/2
+
+ax8 = dfpTrigger_mean.plot.scatter(x='Pressure',y='Photons78',marker="x",c='DarkBlue' , label="Photons78")
+ax8_3 = dfpTrigger_mean.plot.scatter(x='Pressure',y='Photons68',marker="x",c='red' , label="Photons68", ax=ax8)
+ax8_3 = dfpTrigger_mean.plot.scatter(x='Pressure',y='AvgPhoton',marker="x",c='green' , label="AvgPhoton", ax=ax8)
+
+ax8.set_ylabel("Photons")
+ax8.legend(loc='upper center',bbox_to_anchor=(0.7,1))
+plt.savefig("pdf/{}/Photons.pdf".format(pdfname), format="pdf", bbox_inches="tight")
+
+dfpTrigger_mean['8FoldEff'] = Fold8eff(dfpTrigger_mean['AvgPhoton'])
+dfpTrigger_mean['7FoldEff'] = Fold7eff(dfpTrigger_mean['AvgPhoton'],dfpTrigger_mean['8FoldEff']) 
+dfpTrigger_mean['6FoldEff'] = Fold6eff(dfpTrigger_mean['AvgPhoton'],dfpTrigger_mean['7FoldEff'])
+
+
+ax9 = dfpTrigger_mean.plot.scatter(x='Pressure',y='6FoldEff',marker="x",c='DarkBlue' , label="6Fold")
+ax9_3 = dfpTrigger_mean.plot.scatter(x='Pressure',y='7FoldEff',marker="x",c='red' , label="7Fold", ax=ax9)
+ax9_3 = dfpTrigger_mean.plot.scatter(x='Pressure',y='8FoldEff',marker="x",c='green' , label="8Fold", ax=ax9)
+
+ax9.set_ylabel("Coincidence Efficiency")
+ax9.legend(loc='upper center',bbox_to_anchor=(0.7,1))
+plt.savefig("pdf/{}/CoincidenceEfficency.pdf".format(pdfname), format="pdf", bbox_inches="tight")
+
 
 #print(df['Pressure'],df['6Foldeff'])
 plt.show()
