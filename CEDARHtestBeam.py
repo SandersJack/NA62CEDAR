@@ -185,6 +185,7 @@ ax4_2 = dfpTrigger_mean.plot.scatter(x='Pressure',y='8FoldpTrigger', yerr = '8Fo
 ax4.set_ylabel("Coincidences per trigger")
 ax4.legend()
 ax4.set_title("At Least N Coincidences per Trigger vs Pressure")
+ax4.set_ylim(0,0.8)
 plt.savefig("pdf/{}/CoincidencesAvgPointspTrigger.pdf".format(pdfname), format="pdf", bbox_inches="tight")
 
 ax5 = dfpTrigger_mean.plot.scatter(x='Pressure',y='6FoldpTrigger', yerr = '6FoldpTrigger_Error', xerr=0.001, c='DarkBlue',label="6Fold")
@@ -225,6 +226,11 @@ df.loc[df['Pressure'] <= 3.787 , '8Foldeff'] = (df['8Fold']/df['Trigger'])/0.71
 df.loc[df['Pressure'] > 3.787, '8Foldeff'] = (df['8Fold']/df['Trigger'])/0.036
 df.loc[df['Pressure'] > 4, '8Foldeff'] = (df['8Fold']/df['Trigger'])/0.254
 
+
+print(df.loc[((df['Pressure'] < 3.86) & (df['Pressure'] > 3.84))][['Pressure','6Foldeff']])
+print(df.loc[((df['Pressure'] < 3.86) & (df['Pressure'] > 3.84))][['Pressure','7Foldeff']])
+print(df.loc[((df['Pressure'] < 3.86) & (df['Pressure'] > 3.84))][['Pressure','8Foldeff']])
+
 eff_mean = df.groupby('Pressure', as_index=False)['6Foldeff'].mean()
 eff_error = df.groupby('Pressure', as_index=False)['6Foldeff'].sem()
 eff_mean['6Foldeff_Error'] = eff_error['6Foldeff'].fillna(0)
@@ -248,12 +254,12 @@ plt.savefig("pdf/{}/EfficiencyvsPressure.pdf".format(pdfname), format="pdf", bbo
 
 
 dfpTrigger_mean['Photons78'] = n7n8Photons(dfpTrigger_mean['7FoldpTrigger'],dfpTrigger_mean['8FoldpTrigger'])
-dfpTrigger_mean['Photons68'] = n7n8Photons(dfpTrigger_mean['6FoldpTrigger'],dfpTrigger_mean['8FoldpTrigger'])
+dfpTrigger_mean['Photons68'] = n6n8Photons(dfpTrigger_mean['6FoldpTrigger'],dfpTrigger_mean['8FoldpTrigger'])
 dfpTrigger_mean['AvgPhoton'] = (dfpTrigger_mean['Photons78'] + dfpTrigger_mean['Photons68'])/2
 
 ax8 = dfpTrigger_mean.plot.scatter(x='Pressure',y='Photons78',marker="x",c='DarkBlue' , label="Photons78")
 ax8_3 = dfpTrigger_mean.plot.scatter(x='Pressure',y='Photons68',marker="x",c='red' , label="Photons68", ax=ax8)
-ax8_3 = dfpTrigger_mean.plot.scatter(x='Pressure',y='AvgPhoton',marker="x",c='green' , label="AvgPhoton", ax=ax8)
+#ax8_3 = dfpTrigger_mean.plot.scatter(x='Pressure',y='AvgPhoton',marker="x",c='green' , label="AvgPhoton", ax=ax8)
 
 ax8.set_ylabel("Photons")
 ax8.legend(loc='upper center',bbox_to_anchor=(0.7,1))
