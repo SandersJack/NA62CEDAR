@@ -20,3 +20,20 @@
 2022-11-01-12-30-44-535_2022-11-01-15-09-46-935 --- Gas Type: H - First cycle of Nitrogen Purging - No Beam
 2022-11-01-17-30-03-735_2022-11-01-19-29-46-935 --- Gas Type: HN - Nitrogen purging from 22% to 13.2% but missing beam up to around 1.7bar
 2022-11-01-19-20-10-935_2022-11-01-21-55-56-535 --- Gas Type: HN - Nitrogen purging at 13%
+2022-11-01-23-40-20-535_2022-11-02-02-30-15-735 --- Gas Type: HN - Pressure scan at 8% hydrogen (i think)
+2022-11-03-11-22-50-535_2022-11-03-12-33-40-935 --- Gas Type: N - Going up to proton peak
+2022-11-03-11-21-46-935_2022-11-03-12-50-38-535 --- Gas Type: N - Pressure scan going up
+2022-11-03-15-05-54-135_2022-11-03-15-54-39-735 --- Gas Type: N - Pressure scan at 2mm diaphragm
+2022-11-03-14-05-54-135_2022-11-03-14-57-50-535 --- Gas Type: N - Scan at 2mm dia
+2022-11-03-14-05-54-135_2022-11-03-15-13-44-535 --- Gas Type: N - Continuation of scan 
+2022-11-03-14-06-57-735_2022-11-03-17-49-52-935 --- Gas Type: H - Pressure scan 2mm
+2022-11-07-17-00-46-935_2022-11-07-18-05-31-335 --- Gas Type: H - Pressure scan using 1.06mm
+2022-11-04-23-05-45-735_2022-11-05-03-05-31-335 --- Gas Type: H - Pressure scan at 2.02mm
+2022-11-05-10-30-04-935_2022-11-05-16-00-31-335 --- Gas Type: H - Pressure scan using 1.74mm 
+2022-11-05-18-45-08-535_2022-11-06-00-00-30-135 --- Gas Type: H - Pressure scan at 1.34mm
+2022-11-06-15-32-55-335_2022-11-06-23-30-39-735 --- Gas Type: H - Pressure scan at 2.28mm
+00-46-9_20-40-9 --- Gas Type: H - Pressure scan at 1.06mm
+07-11-2022-17-00_07-11-2022-23-20 --- Gas Type: H - pressure scan at 1.06mm
+07-11-2022-17-00_07-11-2022-23-20 --- Gas Type: H - Pressure scan at 1.06mm
+2022-11-03-19-20-40-935_2022-11-03-21-35-06-135 --- Gas Type: H - Pressure scan at 2.5mm
+2022-11-06-15-30-07-335_2022-11-07-06-29-37-335 --- Gas Type: H - 2.38 full
