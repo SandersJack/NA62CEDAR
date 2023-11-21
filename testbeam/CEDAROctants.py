@@ -36,8 +36,13 @@ for l in range(len(mu)):
 n8Sectors_ = []
 n7Sectors_ = []
 n6Sectors_ = []
+n5Sectors_ = []
+n4Sectors_ = []
+n3Sectors_ = []
+n2Sectors_ = []
+
 for v in range((len(mu))):
-    n8Sectors = n7Sectors = n6Sectors = 0
+    n8Sectors = n7Sectors = n6Sectors = n5Sectors = n4Sectors = n3Sectors = n2Sectors = 0
     for t in range(len(nSectors)):
         if nSectors_[v][t] > 7:
             n8Sectors += 1
@@ -45,11 +50,28 @@ for v in range((len(mu))):
             n7Sectors += 1
         if nSectors_[v][t] > 5:
             n6Sectors += 1
+        if nSectors_[v][t] > 4:
+            n5Sectors += 1
+        if nSectors_[v][t] > 3:
+            n4Sectors += 1
+        if nSectors_[v][t] > 2:
+            n3Sectors += 1
+        if nSectors_[v][t] > 1:
+            n2Sectors += 1
+    
+    n2Sectors_.append(n2Sectors)
+    n3Sectors_.append(n3Sectors)
+    n4Sectors_.append(n4Sectors)
+    n5Sectors_.append(n5Sectors)          
     n6Sectors_.append(n6Sectors)
     n7Sectors_.append(n7Sectors)
     n8Sectors_.append(n8Sectors)     
     print("********************************")
     print("For mu of {}".format(mu[v]))
+    print("Number of at least 2 coincidence = {} . fraction of total rings {} ".format(n2Sectors, n2Sectors/totalrings))
+    print("Number of at least 3 coincidence = {} . fraction of total rings {} ".format(n3Sectors, n3Sectors/totalrings))
+    print("Number of at least 4 coincidence = {} . fraction of total rings {} ".format(n4Sectors, n4Sectors/totalrings))
+    print("Number of at least 5 coincidence = {} . fraction of total rings {} ".format(n5Sectors, n5Sectors/totalrings))
     print("Number of at least 6 coincidence = {} . fraction of total rings {} ".format(n6Sectors, n6Sectors/totalrings))
     print("Number of at least 7 coincidence = {} . fraction of total rings {} ".format(n7Sectors, n7Sectors/totalrings))
     print("Number of at least 8 coincidence = {} . fraction of total rings {} ".format(n8Sectors, n8Sectors/totalrings))

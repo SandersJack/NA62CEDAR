@@ -13,7 +13,7 @@ from os.path import isfile, join
 df = pd.read_csv("formated_data/Timber_data.2022-11-04-23-05-45-735_2022-11-05-03-05-31-335.csv")
 df['Timestamp (UTC_TIME)'] = pd.to_datetime(df['Timestamp (UTC_TIME)'])
 
-dfmc = pd.read_csv("1mm.csv")
+dfmc = pd.read_csv("2mm65GeV.csv")
 
 data_mean = df.groupby('Pressure', as_index=False)['6Fold'].mean()
 data_error = df.groupby('Pressure', as_index=False)['6Fold'].sem()
@@ -27,7 +27,7 @@ data_mean['8Fold'] = df.groupby('Pressure', as_index=False)['8Fold'].mean()['8Fo
 data_error = df.groupby('Pressure', as_index=False)['8Fold'].sem()
 data_mean['8Fold_Error'] = data_error['8Fold'].fillna(0)
 
-pdfname = str(df['Timestamp (UTC_TIME)'].iloc[0].strftime('%m-%d_%H-%M')) + "--" + str(df['Timestamp (UTC_TIME)'].iloc[-1].strftime('%m-%d_%H-%M'))
+pdfname = str(df['Timestamp (UTC_TIME)'].iloc[0].strftime('%m-%d_%H-%M')) + "--" + str(df['Timestamp (UTC_TIME)'].iloc[-1].strftime('%m-%d_%H-%M')+ "_2")
 try:
     makedirs('pdf/data_mc/{}'.format(pdfname))
 except FileExistsError:

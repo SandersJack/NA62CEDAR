@@ -9,11 +9,27 @@ import mplhep as hep
 plt.style.use(hep.style.ROOT)
 from os import listdir , makedirs, path
 from os.path import isfile, join
+import numpy as np
 
 
-filename = "1mm.csv"
+def n7n8Photons(n7,n8):
+    return np.log(1+((8)/((n7/n8)-1)))
+
+def n6n8Photons(n6,n8):
+    return np.log(1+((14)/(np.sqrt(4-7*(1-n6/n8))-2)))
+
+def Fold8eff(phi):
+    return (1-np.exp(-phi))**8
+
+def Fold7eff(phi,n8):
+    return n8 + 8*(1-np.exp(-phi))**7*np.exp(-phi)
+
+def Fold6eff(phi,n7):
+    return n7 + 28*(1-np.exp(-phi))**6*np.exp(-2*phi)
+
+filename = "H_nFF_33.csv"
 dfmc = pd.read_csv(filename)
-pdfname = "1.1mmpresurescan"
+pdfname = "2mmpresurescanH_L_8PMT_NQW_nFF_33"
 
 try:
     makedirs('pdf/mc/{}'.format(pdfname))
@@ -27,6 +43,7 @@ ax_4_5 = dfmc.plot.scatter(x='Pressure',y='8Fold', marker="x", c='green',label="
 
 ax_4.set_ylabel("Coincidences per trigger")
 ax_4.legend()
+ax_4.set_ylim(0,0.8)
 ax_4.set_title("At Least N Coincidences per Trigger vs Pressure MC")
 plt.savefig("pdf/mc/{}/CoincidencesAvgPointspTrigger.pdf".format(pdfname), format="pdf", bbox_inches="tight")
 
@@ -51,5 +68,34 @@ ax6_3 = dfmc.plot.scatter(x='Pressure',y='R87',marker="x",c='red' , label="R87 M
 ax6.set_ylabel("Ratio")
 ax6.legend()
 plt.savefig("pdf/mc/{}/RatioPlot.pdf".format(pdfname), format="pdf", bbox_inches="tight")
+
+
+dfmc['Photons78'] = n7n8Photons(dfmc['7Fold'],dfmc['8Fold'])
+dfmc['Photons68'] = n6n8Photons(dfmc['6Fold'],dfmc['8Fold'])
+dfmc['AvgPhoton'] = (dfmc['Photons78'] + dfmc['Photons68'])/2
+
+ax7 = dfmc.plot.scatter(x='Pressure',y='Photons78',marker="x",c='DarkBlue' , label="Photons78")
+ax7_3 = dfmc.plot.scatter(x='Pressure',y='Photons68',marker="x",c='red' , label="Photons68", ax=ax7)
+#ax7_3 = dfmc.plot.scatter(x='Pressure',y='AvgPhoton',marker="x",c='green' , label="AvgPhoton", ax=ax7)
+
+ax7.set_ylabel("Average Number of Photo-electrons per PMT")
+ax7.set_ylim(0,3)
+ax7.legend(loc='upper center',bbox_to_anchor=(0.54,1))
+plt.savefig("pdf/mc/{}/Photons.pdf".format(pdfname), format="pdf", bbox_inches="tight")
+
+dfmc['8FoldEff'] = Fold8eff(dfmc['AvgPhoton'])
+dfmc['7FoldEff'] = Fold7eff(dfmc['AvgPhoton'],dfmc['8FoldEff']) 
+dfmc['6FoldEff'] = Fold6eff(dfmc['AvgPhoton'],dfmc['7FoldEff'])
+
+ax8 = dfmc.plot.scatter(x='Pressure',y='6FoldEff',marker="x",c='DarkBlue' , label="6Fold")
+ax8_3 = dfmc.plot.scatter(x='Pressure',y='7FoldEff',marker="x",c='red' , label="7Fold", ax=ax8)
+ax8_3 = dfmc.plot.scatter(x='Pressure',y='8FoldEff',marker="x",c='green' , label="8Fold", ax=ax8)
+
+ax8.set_ylabel("Coincidence Efficiency")
+ax8.legend()
+plt.savefig("pdf/mc/{}/CoincidenceEfficency.pdf".format(pdfname), format="pdf", bbox_inches="tight")
+
+
+
 
 plt.show()
